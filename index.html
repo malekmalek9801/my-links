@@ -4,12 +4,131 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>مركز المنصات والروابط الشخصية</title>
-  <link rel="stylesheet" href="style.css">
+  
+  <!-- مكتبة الأيقونات Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- 1. كود الـ CSS المدمج هنا -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 30px 15px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .profile-card {
+      text-align: center;
+      background: #1e293b;
+      padding: 25px;
+      border-radius: 16px;
+      border: 1px solid #334155;
+    }
+
+    .avatar {
+      width: 70px;
+      height: 70px;
+      background: #38bdf8;
+      color: #0f172a;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 32px;
+      margin: 0 auto 15px auto;
+    }
+
+    .profile-card h2 { font-size: 20px; color: #f8fafc; }
+    .profile-card p { font-size: 14px; color: #94a3b8; margin-top: 5px; }
+
+    .section h3 {
+      font-size: 16px;
+      color: #38bdf8;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card {
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: #38bdf8;
+      background: #24334a;
+    }
+
+    .card .icon {
+      font-size: 26px;
+      width: 45px;
+    }
+
+    .card .info {
+      flex: 1;
+    }
+
+    .card .info h4 {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .card .info p {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    .arrow {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    /* ألوان الأيقونات والمنصات */
+    .youtube .icon { color: #ff0000; }
+    .kick .icon { color: #53fc18; }
+    .tiktok .icon { color: #00f2fe; }
+    .whatsapp .icon { color: #25d366; }
+    .telegram .icon { color: #229ed9; }
+    .edu-card .icon { color: #38bdf8; }
+  </style>
 </head>
 <body>
 
+  <!-- 2. كود الـ HTML (هيكل الصفحة والروابط) -->
   <div class="container">
+    
     <!-- كارت البروفايل الشخصي -->
     <header class="profile-card">
       <div class="avatar">
@@ -23,16 +142,16 @@
     <section class="section">
       <h3><i class="fa-solid fa-book-open"></i> المنصات التعليمية</h3>
       <div class="grid">
-        <a href="https://bassthalk.com/userprofile/courses/course/1728/sections/4581/video/503719" target="_blank" class="card edu-card">
+        <a href="https://bassthalk.com" target="_blank" class="card edu-card">
           <i class="fa-solid fa-pen-nib icon"></i>
           <div class="info">
             <h4>منصة العربي (بسطهالك)</h4>
-            <p>متابعة دروس اللغة العربية والدروس الحالية</p>
+            <p>متابعة دروس اللغة العربية</p>
           </div>
           <i class="fa-solid fa-arrow-left arrow"></i>
         </a>
 
-        <a href="https://www.mrenglishawy.com/ar/contents/units/details/lessons/details/720484?p=2" target="_blank" class="card edu-card">
+        <a href="https://englishawy.com" target="_blank" class="card edu-card">
           <i class="fa-solid fa-language icon"></i>
           <div class="info">
             <h4>منصة الإنجليزي (الانجليشاوي)</h4>
@@ -80,7 +199,7 @@
     <section class="section">
       <h3><i class="fa-solid fa-comments"></i> التواصل والمجموعات</h3>
       <div class="grid">
-        <a href="https://wa.me/123456789" target="_blank" class="card whatsapp">
+        <a href="https://wa.me/" target="_blank" class="card whatsapp">
           <i class="fa-brands fa-whatsapp icon"></i>
           <div class="info">
             <h4>WhatsApp</h4>
@@ -89,7 +208,7 @@
           <i class="fa-solid fa-arrow-left arrow"></i>
         </a>
 
-        <a href="https://t.me/yourchannel" target="_blank" class="card telegram">
+        <a href="https://t.me/" target="_blank" class="card telegram">
           <i class="fa-brands fa-telegram icon"></i>
           <div class="info">
             <h4>Telegram</h4>
@@ -99,8 +218,13 @@
         </a>
       </div>
     </section>
+
   </div>
 
-  <script src="script.js"></script>
+  <!-- 3. كود الـ JavaScript المدمج هنا -->
+  <script>
+    console.log("الموقع يعمل بنجاح من ملف واحد!");
+  </script>
+
 </body>
 </html>
