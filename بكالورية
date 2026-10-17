@@ -1,1 +1,1346 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة المتابعة الدراسية - MZ</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #8b0000; /* أحمر غامق فاخر */
+            --primary-hover: #a30000;
+            --text-main: #ffffff;
+            --text-muted: #b0b0b0;
+            --accent-green: #2e7d32;
+            --accent-red: #c62828;
+            --yt-red: #ff0000;
+            --border-color: #333333;
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border-bottom: 4px solid var(--primary-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        header h1 {
+            color: var(--text-main);
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* شريط نسبة الإنجاز الإجمالية */
+        .overall-progress {
+            background: var(--card-bg);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .progress-bar-bg {
+            background: #2a2a2a;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--primary-color), #d32f2f, #2e7d32);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* شريط التنقل بين المواد */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            border: 2px solid var(--border-color);
+            padding: 12px 22px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.4);
+        }
+
+        /* محتوى المواد */
+        .subject-content {
+            display: none;
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .subject-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2.subject-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subject-percent {
+            font-size: 1rem;
+            background: #2a2a2a;
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: #fff;
+            border: 1px solid var(--border-color);
+        }
+
+        .concept-title {
+            color: #ff5252;
+            font-size: 1.25rem;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+        }
+
+        .section-group {
+            margin-bottom: 20px;
+        }
+
+        .section-group h3 {
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            background: #252525;
+            padding: 8px 12px;
+            border-right: 4px solid var(--primary-color);
+            border-radius: 4px;
+        }
+
+        .section-group h4 {
+            color: #ff8a80;
+            font-size: 0.95rem;
+            margin: 10px 0 6px 0;
+        }
+
+        .lessons-list {
+            list-style: none;
+        }
+
+        .lesson-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2a2a2a;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .lesson-item:hover {
+            background: #333333;
+        }
+
+        .lesson-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .lesson-name {
+            font-size: 0.98rem;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 4px;
+            width: fit-content;
+        }
+
+        .status-badge.accumulated {
+            background-color: rgba(198, 40, 40, 0.2);
+            color: #ff5252;
+            border: 1px solid var(--accent-red);
+        }
+
+        .status-badge.completed {
+            background-color: rgba(46, 125, 50, 0.2);
+            color: #69f0ae;
+            border: 1px solid var(--accent-green);
+        }
+
+        .actions-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* زر يوتيوب */
+        .yt-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #272727;
+            color: #ffffff;
+            border: 1px solid #444;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .yt-btn:hover {
+            background-color: var(--yt-red);
+            border-color: var(--yt-red);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+
+        /* زر الإنجاز */
+        .done-btn {
+            background-color: #3b3b3b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .done-btn:hover {
+            background-color: #505050;
+        }
+
+        .lesson-item.is-done .done-btn {
+            background-color: var(--accent-green);
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            .tab-btn {
+                width: 100%;
+                text-align: center;
+            }
+            .lesson-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .actions-group {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>منصة المتابعة الدراسية - MZ</h1>
+            <p>تابع دروسك، شاهد الشرح مباشرة على يوتيوب، وتغلب على المتراكمات</p>
+        </header>
+
+        <!-- نسبة التقدم الكلية -->
+        <div class="overall-progress">
+            <div class="progress-header">
+                <span>نسبة الإنجاز الكلية للمواد:</span>
+                <span id="overall-text">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div id="overall-bar" class="progress-bar-fill"></div>
+            </div>
+        </div>
+
+        <!-- أزرار المواد -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'arabic')">اللغة العربية</button>
+            <button class="tab-btn" onclick="switchTab(event, 'english')">اللغة الإنجليزية</button>
+            <button class="tab-btn" onclick="switchTab(event, 'history')">التاريخ</button>
+            <button class="tab-btn" onclick="switchTab(event, 'programming')">البرمجة</button>
+        </div>
+
+        <!-- محتوى اللغة العربية -->
+        <div id="arabic" class="subject-content active">
+            <h2 class="subject-title">
+                <span>مادة اللغة العربية</span>
+                <span class="subject-percent" id="arabic-percent">0%</span>
+            </h2>
+            
+            <div class="section-group">
+                <h3>أولاً: النصوص</h3>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">1. العلم بين القانون والضمير</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+درس+العلم+بين+القانون+والضمير+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">2. التقنيه وصناعه الرأي العام</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+درس+التقنيه+وصناعه+الرأي+العام+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">3. حقوق الانسان بين العالميه والخصوصيه</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+درس+حقوق+الانسان+بين+العالميه+والخصوصيه+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section-group">
+                <h3>ثانياً: النصوص النثرية</h3>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">1. الخلق جوهر الفضيله</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+درس+الخلق+جوهر+الفضيله+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">2. بين الذوق والعقل</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+درس+بين+الذوق+والعقل+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">3. الحريه الفكرية</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+درس+الحريه+الفكرية+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section-group">
+                <h3>ثالثاً: النصوص الشعرية</h3>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">1. العلم نور</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+نص+العلم+نور+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">2. أثر الكلمه وحفظ اللسان</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+أثر+الكلمه+وحفظ+اللسان+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">3. يا أخي الانسان</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+نص+يا+أخي+الانسان+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section-group">
+                <h3>رابعاً: النحو</h3>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">1. الاسماء الخمسه</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+درس+الاسماء+الخمسه+نحو+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">2. الممنوع من الصرف</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+الممنوع+من+الصرف+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">3. النعت</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+درس+النعت+نحو+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">4. البدل</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+درس+البدل+نحو+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">5. العطف</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+درس+العطف+نحو+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section-group">
+                <h3>سادساً: البلاغة</h3>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">1. الاساليب الانشائيه والخبرية</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+الاساليب+الانشائيه+والخبرية+بلاغه+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">2. تحليل الصور الخياليه</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+تحليل+الصور+الخياليه+بلاغه+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">3. الايجاز والاطناب</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+الايجاز+والاطناب+بلاغه+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section-group">
+                <h3>سابعاً: القصة</h3>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">1. حكايات الغريب</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+قصه+حكايات+الغريب+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">2. عوده الروح</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+عوده+الروح+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">3. كفاح طيبة</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+كفاح+طيبة+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">4. الارض</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+قصه+الارض+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">5. شمس وليل</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+شمس+وليل+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">6. العبرات</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+قصة+العبرات+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">7. وا إسلاماه</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+قصه+وا+إسلاماه+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">8. عبقريه عمر</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+عبقريه+عمر+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">9. رجل تحت الصفر</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+رجل+تحت+الصفر+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">10. صح النوم</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+صح+النوم+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- محتوى اللغة الإنجليزية (مترجم ومع روابط الشرح) -->
+        <div id="english" class="subject-content">
+            <h2 class="subject-title">
+                <span>مادة اللغة الإنجليزية (English Contents)</span>
+                <span class="subject-percent" id="english-percent">0%</span>
+            </h2>
+
+            <!-- CONCEPT 1 -->
+            <h2 class="concept-title">CONCEPT 1: Well-being (المفهوم الأول: جودة الحياة والصحة النفسية)</h2>
+            <div class="section-group">
+                <h3>Unit 1: Living Well in a Complex World (العيش بشكل جيد في عالم معقد)</h3>
+                
+                <h4>Section (A): Social Reflection (التأمل الاجتماعي)</h4>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 1: Social Media and Self-Image (وسائل التواصل الاجتماعي والصورة الذاتية)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+1+Social+Media+and+Self+Image" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 2: Exploring Modern Lifestyles (استكشاف أنماط الحياة الحديثة)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+1+Exploring+Modern+Lifestyles" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+
+                <h4>Section (B): Shared Responsibility (المسؤولية المشتركة)</h4>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 3: Whose Responsibility Is It? (مسؤولية مَن هذه؟)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+1+Whose+Responsibility+Is+It" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 4: Understanding Mental Health (فهم الصحة النفسية)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+1+Understanding+Mental+Health" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- CONCEPT 2 -->
+            <h2 class="concept-title">CONCEPT 2: Experiences (المفهوم الثاني: التجارب والخبرات)</h2>
+            <div class="section-group">
+                <h3>Unit 2: Leisure Time (وقت الفراغ)</h3>
+                
+                <h4>Section (A): Leisure in a Digital World (وقت الفراغ في عالم رقمي)</h4>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 1: Screen Time and Young People (وقت الشاشات والشباب)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+2+Screen+Time+and+Young+People" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 2: Creative Arts as Leisure Activities (الفنون الإبداعية كأنشطة ترفيهية)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+2+Creative+Arts" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+
+                <h4>Section (B): Lifelong Activity (نشاط مدى الحياة)</h4>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 3: Sport and Physical Activity as Leisure (الرياضة والنشاط البدني كترفيه)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+2+Sport+and+Physical+Activity" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 4: Not Exactly a Relaxing Day (ليس يوماً للاسترخاء تماماً)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+2+Not+Exactly+a+Relaxing+Day" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- CONCEPT 3 -->
+            <h2 class="concept-title">CONCEPT 3: Identity (المفهوم الثالث: الهوية)</h2>
+            <div class="section-group">
+                <h3>Unit 3: Echoes of the Past (أصداء الماضي)</h3>
+                
+                <h4>Section (A): Historical Landscape (المشهد التاريخي)</h4>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 1: Sites of Memory (مواقع الذاكرة والتاريخ)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+3+Sites+of+Memory" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 2: The Museum as a Storyteller (المتحف كراوٍ للقصص)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+3+The+Museum+as+a+Storyteller" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+
+                <h4>Section (B): Documenting History (توثيق التاريخ)</h4>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 3: The Viral Past (الماضي المنتشر عبر الإنترنت)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+3+The+Viral+Past" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 4: Social Media and Historical Events (وسائل التواصل والأحداث التاريخية)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+3+Social+Media+and+Historical+Events" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- CONCEPT 4 -->
+            <h2 class="concept-title">CONCEPT 4: Consumption and Choice (المفهوم الرابع: الاستهلاك والاختيار)</h2>
+            <div class="section-group">
+                <h3>Unit 4: The Power of Choice (قوة الاختيار)</h3>
+                
+                <h4>Section (A): Food Awareness (الوعي الغذائي)</h4>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 1: Food Waste (هدر الطعام)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+4+Food+Waste" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 2: Beyond the Brand (ما وراء العلامة التجارية)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+4+Beyond+the+Brand" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+
+                <h4>Section (B): Online Consumption (الاستهلاك عبر الإنترنت)</h4>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 3: Digital Consumption (الاستهلاك الرقمي)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+4+Digital+Consumption" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 4: Black Friday and Sales Culture (البلاك فرايداي وثقافة التخفيضات)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+4+Black+Friday+and+Sales+Culture" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- CONCEPT 5 -->
+            <h2 class="concept-title">CONCEPT 5: Sharing the Planet (المفهوم الخامس: المشاركة في الكوكب)</h2>
+            <div class="section-group">
+                <h3>Unit 5: The Greenhouse Effect (ظاهرة الاحتباس الحراري)</h3>
+                
+                <h4>Section (A): Climate Change (تغير المناخ)</h4>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 1: The Climate Crisis (أزمة المناخ)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+5+The+Climate+Crisis" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 2: Renewable Energy - Powering a Sustainable Future (الطاقة المتجددة)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+5+Renewable+Energy" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+
+                <h4>Section (B): Egypt's Green Change Makers (صناع التغيير الأخضر في مصر)</h4>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 3: Greening Projects in Egypt (مشاريع التحول الأخضر في مصر)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+5+Greening+Projects+in+Egypt" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">Lesson 4: Individual and Collective Actions (الإجراءات الفردية والجماعية)</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=English+sec+2+Unit+5+Individual+and+Collective+Actions" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- محتوى التاريخ -->
+        <div id="history" class="subject-content">
+            <h2 class="subject-title">
+                <span>مادة التاريخ</span>
+                <span class="subject-percent" id="history-percent">0%</span>
+            </h2>
+            
+            <div class="section-group">
+                <h3>الوحدة الأولى</h3>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">1. بناء الدوله المصرية واستمرارها عبر التاريخ</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+بناء+الدوله+المصرية+واستمرارها+عبر+التاريخ+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">2. الدولة المصرية القديمه ومقاومة الاحتلال</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+الدولة+المصرية+القديمه+ومقاومة+الاحتلال+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">3. التحولات الكبري في مصر العصر الوسيط</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+التحولات+الكبري+في+مصر+العصر+الوسيط+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">4. التحولات الكبري في مصر ف العصر الحديث</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+التحولات+الكبري+في+مصر+العصر+الحديث+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section-group">
+                <h3>الوحدة الثانية</h3>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">1. سياسات الاحتلال بمصر في العصر الحديث</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+سياسات+الاحتلال+بمصر+في+العصر+الحديث+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">2. صمود الشعب المصري ومقاومة الاحتلال</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+صمود+الشعب+المصري+ومقاومة+الاحتلال+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">3. ثورة 23 يوليو 1952 م والتحولات الكبري ف مصر</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+ثورة+23+يوليو+1952+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">4. الهويه الوطنيه في مواجهة الاستعمار الجديد</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+الهويه+الوطنيه+في+مواجهة+الاستعمار+الجديد+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section-group">
+                <h3>الوحدة الثالثة</h3>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">1. حركات التحرر الوطني ضد الاحتلال الفرنسي والايطالي ف العالم العربي</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+حركات+التحرر+الوطني+ضد+الاحتلال+الفرنسي+والايطالي+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">2. حركات التحرر الوطني ضد الاحتلال البريطاني والاسباني في العالم العربي</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+حركات+التحرر+الوطني+ضد+الاحتلال+البريطاني+والاسباني+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">3. مرتكزات الدور المصري إقليميا ودوليا</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+مرتكزات+الدور+المصري+إقليميا+ودوليا+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">4. دور مصر في دعم حركات التحرر الوطني</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+دور+مصر+في+دعم+حركات+التحرر+الوطني+تانيه+ثانوي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- محتوى البرمجة -->
+        <div id="programming" class="subject-content">
+            <h2 class="subject-title">
+                <span>مادة البرمجة</span>
+                <span class="subject-percent" id="programming-percent">0%</span>
+            </h2>
+            
+            <div class="section-group">
+                <h3>الفصل الأول: تكنولوجيا المعلومات والمجتمع</h3>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">1. تتطور تكنولوجيا المعلومات والتحول الاجتماعي</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+تطور+تكنولوجيا+المعلومات+والتحول+الاجتماعي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">2. كيف يعمل الذكاء الاصطناعي</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+كيف+يعمل+الذكاء+الاصطناعي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">3. الذكاء الاصطناعي في الحياة اليومية والصناعية</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+الذكاء+الاصطناعي+في+الحياة+اليومية" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">4. القضايا الاخلاقيه المتعلقه بالذكاء الاصطناعي</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+القضايا+الاخلاقيه+المتعلقه+بالذكاء+الاصطناعي" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section-group">
+                <h3>الفصل الثاني: الأمن السيبراني</h3>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">1. تقنيات التشفير والمصادقه</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+تقنيات+التشفير+والمصادقه" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">2. تصميم امن الشبكات</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+تصميم+امن+الشبكات" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">3. الاستجابه للحوادث وإدارة المخاطر</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+الاستجابه+للحوادث+وإدارة+المخاطر+امن+سيبراني" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section-group">
+                <h3>الفصل الثالث: الويب</h3>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">1. البنيه العامه لتطبيقات الويب</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+البنيه+العامه+لتطبيقات+الويب" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">2. طرق الاتصال في تطبيقات الويب</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+طرق+الاتصال+في+تطبيقات+الويب+HTTP+APIs" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">3. اساسيات تكنولوجيا الواجهة الاماميه</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+اساسيات+تكنولوجيا+الواجهة+الاماميه+HTML+CSS+JS" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section-group">
+                <h3>الفصل الرابع: تصميم الويب والوسائط</h3>
+                <ul class="lessons-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">1. انواع الوسائط وخصائصها</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+انواع+الوسائط+وخصائصها+تصميم+ويب" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">2. تصميم المعلومات وتجربه المستخدم للمواقع الالكترونيه</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+تصميم+المعلومات+وتجربه+المستخدم+UI+UX" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">3. طرق تقيم المواقع الالكترونيه</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+طرق+تقيم+المواقع+الالكترونيه" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <span class="lesson-name">4. عمليه التحسين التكراري للمواقع الالكترونيه</span>
+                            <span class="status-badge accumulated">متراكم</span>
+                        </div>
+                        <div class="actions-group">
+                            <a class="yt-btn" href="https://www.youtube.com/results?search_query=شرح+التحسين+التكراري+للمواقع+الالكترونيه" target="_blank">📺 شرح يوتيوب</a>
+                            <button class="done-btn" onclick="toggleLesson(this)">إتمام الدرس ✔</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // التنقل بين المواد
+        function switchTab(event, subjectId) {
+            document.querySelectorAll('.subject-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(subjectId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // تبديل حالة الدرس
+        function toggleLesson(button) {
+            const item = button.closest('.lesson-item');
+            const badge = item.querySelector('.status-badge');
+            
+            item.classList.toggle('is-done');
+            
+            if (item.classList.contains('is-done')) {
+                badge.textContent = 'تم الإنجاز ✔';
+                badge.className = 'status-badge completed';
+                button.textContent = 'إلغاء الإتمام ❌';
+            } else {
+                badge.textContent = 'متراكم';
+                badge.className = 'status-badge accumulated';
+                button.textContent = 'إتمام الدرس ✔';
+            }
+            saveProgress();
+            updateProgress();
+        }
+
+        // حساب وتحديث نسب الإنجاز
+        function updateProgress() {
+            const subjects = ['arabic', 'english', 'history', 'programming'];
+            let totalLessons = 0;
+            let totalDone = 0;
+
+            subjects.forEach(sub => {
+                const subContainer = document.getElementById(sub);
+                const lessons = subContainer.querySelectorAll('.lesson-item');
+                const doneLessons = subContainer.querySelectorAll('.lesson-item.is-done');
+                
+                const percent = lessons.length > 0 ? Math.round((doneLessons.length / lessons.length) * 100) : 0;
+                document.getElementById(`${sub}-percent`).textContent = `${percent}%`;
+
+                totalLessons += lessons.length;
+                totalDone += doneLessons.length;
+            });
+
+            const overallPercent = totalLessons > 0 ? Math.round((totalDone / totalLessons) * 100) : 0;
+            document.getElementById('overall-text').textContent = `${overallPercent}% (${totalDone}/${totalLessons} درس)`;
+            document.getElementById('overall-bar').style.width = `${overallPercent}%`;
+        }
+
+        // حفظ الحالة في LocalStorage
+        function saveProgress() {
+            const data = {};
+            document.querySelectorAll('.lesson-item').forEach((item, index) => {
+                data[index] = item.classList.contains('is-done');
+            });
+            localStorage.setItem('study_progress_malek', JSON.stringify(data));
+        }
+
+        // استرجاع الحالة عند فتح الصفحة
+        function loadProgress() {
+            const saved = localStorage.getItem('study_progress_malek');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    document.querySelectorAll('.lesson-item').forEach((item, index) => {
+                        if (data[index]) {
+                            item.classList.add('is-done');
+                            const badge = item.querySelector('.status-badge');
+                            const button = item.querySelector('.done-btn');
+                            if (badge) {
+                                badge.textContent = 'تم الإنجاز ✔';
+                                badge.className = 'status-badge completed';
+                            }
+                            if (button) {
+                                button.textContent = 'إلغاء الإتمام ❌';
+                            }
+                        }
+                    });
+                } catch (e) {
+                    console.error("Error loading progress:", e);
+                }
+            }
+            updateProgress();
+        }
+
+        window.onload = loadProgress;
+    </script>
+</body>
+</html>
